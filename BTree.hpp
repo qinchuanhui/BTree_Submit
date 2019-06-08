@@ -84,7 +84,7 @@ namespace sjtu {
         information info;
         long info_offset = 0;
         FILE *f1;
-        char f1_name[20] ="xixixi.txt" ;
+        char f1_name[20] ="xixixxii.txt" ;
 
         bool f1_isopen = false;
         bool f1_exists =false;
@@ -104,7 +104,7 @@ namespace sjtu {
                 f1 = fopen(f1_name, "rb+");
                 //if hasn't been open,open it but rb+ can only open
                 //can't create.
-                std::cout<<"f1"<<f1<<'\n';
+                //std::cout<<"f1"<<f1<<'\n';
                 if (f1 == nullptr){//open shibaire.
                     f1_exists = 0;
                     f1 = fopen(f1_name, "w");//w create a file;
