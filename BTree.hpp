@@ -346,15 +346,19 @@ namespace sjtu {
             BTree *from;
         public:
             bool modify(const Value &value) {
+               leafnode leaf;
+               from->readfile(&leaf,offset,1, sizeof(leafnode));
+               leaf.val[pos].second=value;
+               from->writefile(&leaf,offset,1, sizeof(leaf));
                 return true;
 
             }
 
-            iterator() {
+            iterator(BTree *_from= nullptr, long _offset = 0, int _pos = 0) {
 
-                offset = 0;
-                pos = 0;
-                from = nullptr;
+                offset=_offset ;
+                pos = _pos;
+                from = _from;
                 // TODO Default Constructor
             }
 
@@ -457,13 +461,13 @@ namespace sjtu {
             }
 
 
-            Value getvalue() {
+            Value getValue() {
                 leafnode leaf;
                 from->readfile(&leaf, offset, 1, sizeof(leaf));
                 return leaf.val[pos].second;
             }
 
-            Value changevalue(const Value &v) {
+            Value changeValue(const Value &v) {
                 leafnode leaf;
                 from->readfile(&leaf, offset, 1, sizeof(leaf));
                 leaf.val[pos].second = v;
@@ -508,11 +512,12 @@ namespace sjtu {
             BTree *from;
 
         public:
-            const_iterator() {
-                offset = 0;
-                pos = 0;
-                from = nullptr;
-                // TODO
+            const_iterator(BTree *_from= nullptr, long _offset = 0, int _pos = 0) {
+
+                offset=_offset ;
+                pos = _pos;
+                from = _from;
+                // TODO Default Constructor
             }
 
             const_iterator(const const_iterator &other) {
