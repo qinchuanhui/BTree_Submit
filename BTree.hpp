@@ -14,8 +14,6 @@
 # include "exception.hpp"
 # include"utility.hpp"
 
-using std::pair;
-using std::make_pair;
 
 namespace sjtu {
     template<class Key, class Value, class Compare = std::less<Key> >
@@ -73,9 +71,9 @@ namespace sjtu {
                 parent = 0;
                 cur = 0;
                 pre = next = 0;
-                for(int i=0;i<L+1;++i){
-                    val[i].first=0;
-                    val[i].second=0;
+                for (int i = 0; i < L + 1; ++i) {
+                    val[i].first = 0;
+                    val[i].second = 0;
                 }
             }
         };
@@ -84,10 +82,10 @@ namespace sjtu {
         information info;
         long info_offset = 0;
         FILE *f1;
-        char f1_name[20] ="majpipi.txt" ;
+        char f1_name[20] = "mapipi.txt";
 
         bool f1_isopen = false;
-        bool f1_exists =false;
+        bool f1_exists = false;
 
         inline void
         readfile(void *read_place, long offset, size_t num, size_t size)//put the information into a pointer;
@@ -105,7 +103,7 @@ namespace sjtu {
                 //if hasn't been open,open it but rb+ can only open
                 //can't create.
                 //std::cout<<"f1"<<f1<<'\n';
-                if (f1 == nullptr){//open shibaire.
+                if (f1 == nullptr) {//open shibaire.
                     f1_exists = 0;
                     f1 = fopen(f1_name, "w");//w create a file;
                     fclose(f1);
@@ -185,7 +183,7 @@ namespace sjtu {
             }
             leaf.cur++;
             info.size_tree++;
-            for (int j = leaf.cur - 1; j > pos; --j) {
+            for (int j = leaf.cur; j > pos; --j) {
                 leaf.val[j].first = leaf.val[j - 1].first;
                 leaf.val[j].second = leaf.val[j - 1].second;
             }
@@ -201,8 +199,6 @@ namespace sjtu {
             else spilt_leaf(leaf, p.first, v.first);
             p.second = Success;
             return p;
-
-
         }
 
         //insert a newnode(both leaf and normal) to its parent,if cannot,spilt parent;
@@ -210,7 +206,7 @@ namespace sjtu {
         void insert_tonode(normalnode &node, Key &newkey, long offset) {
             int pos = 0;
             for (; pos < node.cur - 1; ++pos)
-                if (newkey < node.key[pos]&&newkey==node.key[pos]) break;
+                if (newkey < node.key[pos]) break;
             for (int i = node.cur; i > pos + 1; --i)
                 node.child[i] = node.child[i - 1];
             for (int i = node.cur - 1; i > pos; --i)
@@ -230,8 +226,7 @@ namespace sjtu {
             readfile(&parent, leaf.parent, 1, sizeof(normalnode));
             leafnew.offset = info.eof;
             info.eof += sizeof(leafnew);
-            if (info.tail_leaf == leaf.offset)
-                info.tail_leaf = leafnew.offset;
+
             //if (parent.cur < M - 1) {//insert directly
             leaf.cur = L / 2;
             leafnew.cur = L / 2 + 1;
@@ -240,7 +235,8 @@ namespace sjtu {
             leafnew.next = leaf.next;
             leaf.next = leafnew.offset;
             for (int i = 0; i < L / 2 + 1; ++i) {
-                leafnew.val[i] = leaf.val[i + L / 2];
+                leafnew.val[i].first = leaf.val[i + L / 2].first;
+                leafnew.val[i].second = leaf.val[i + L / 2].second;
 
                 if (leafnew.val[i].first == key) {
                     it.offset = leafnew.offset;
@@ -248,7 +244,7 @@ namespace sjtu {
                 }
             }
             leafnode nxt;
-            if (leafnew.next == 0);
+            if (leafnew.next == 0) info.tail_leaf=leafnew.offset;
             else {
                 readfile(&nxt, leafnew.next, 1, sizeof(nxt));
                 nxt.pre = leafnew.offset;
@@ -350,7 +346,7 @@ namespace sjtu {
             BTree *from;
         public:
             bool modify(const Value &value) {
-                return  true;
+                return true;
 
             }
 
@@ -470,8 +466,8 @@ namespace sjtu {
             Value changevalue(const Value &v) {
                 leafnode leaf;
                 from->readfile(&leaf, offset, 1, sizeof(leaf));
-                leaf.val[pos].second=v;
-                from->writefile(&leaf,offset,1, sizeof(leaf));
+                leaf.val[pos].second = v;
+                from->writefile(&leaf, offset, 1, sizeof(leaf));
                 return v;
 
             }
@@ -658,7 +654,7 @@ namespace sjtu {
         BTree() {
             f1 = nullptr;
             openfile();
-            if(f1_exists==0)build_tree();
+            if (f1_exists == 0)build_tree();
             // Todo Default
         }
 
@@ -761,7 +757,7 @@ namespace sjtu {
          * The default method of check the equivalence is !(a < b || b > a)
          */
         size_t count(const Key &key) const {
-            return  0;
+            return 0;
         }
 
         /**
