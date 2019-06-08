@@ -1,4 +1,3 @@
-
 // Created by 93738 on 2019/6/2.
 //
 
@@ -31,9 +30,8 @@ namespace sjtu {
     private:
 
         static const int M = 226;
-        static const int L = 32;
-        static const int MM = M / 2;
-        static const int LL = L / 2;
+        static const int L = 30;
+        
 
 
         struct information {
@@ -84,7 +82,7 @@ namespace sjtu {
         information info;
         long info_offset = 0;
         FILE *f1;
-        char f1_name[10000] = " ";
+        char f1_name[10] ="xixixi.txt" ;
 
         bool f1_isopen = false;
 
@@ -264,7 +262,6 @@ namespace sjtu {
                 if (node.key[M - 1] <= node.key[pos]) break;
             Key tmpk = node.key[M - 1];
             long tmpc = node.child[M];
-
             for (int j = M - 1; j > pos; --j)
                 node.key[j] = node.key[j - 1];
             for (int j = M; j > pos + 1; --j)
