@@ -244,7 +244,7 @@ namespace sjtu {
                 }
             }
             leafnode nxt;
-            if (leafnew.next == 0) info.tail_leaf=leafnew.offset;
+            if (leafnew.next == 0) info.tail_leaf = leafnew.offset;
             else {
                 readfile(&nxt, leafnew.next, 1, sizeof(nxt));
                 nxt.pre = leafnew.offset;
@@ -266,8 +266,8 @@ namespace sjtu {
             normalnode newnode;
             newnode.offset = info.eof;
             info.eof += sizeof(newnode);
-            node.cur = node.cur / 2;
-            newnode.cur = M / 2 + 1;
+            node.cur = M / 2 + 1;
+            newnode.cur = M / 2;
             newnode.parent = node.parent;
             newnode.child_isleaf = node.child_isleaf;
             /*int pos = 0;
