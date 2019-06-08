@@ -33,7 +33,6 @@ namespace sjtu {
         static const int L = 30;
 
 
-
         struct information {
             int head_leaf;
             int tail_leaf;
@@ -74,7 +73,10 @@ namespace sjtu {
                 parent = 0;
                 cur = 0;
                 pre = next = 0;
-                memset(val, 0, sizeof(val));
+                for(int i=0;i<L+1;++i){
+                    val[i].first=0;
+                    val[i].second=0;
+                }
             }
         };
 
@@ -115,9 +117,9 @@ namespace sjtu {
 
         void build_tree() {
             info.size_tree = 0;
+            info.eof = sizeof(information);
             normalnode root;
             leafnode leaf1;
-            info.eof = sizeof(information);
             info.root_tree = root.offset = info.eof;
             info.eof += sizeof(root);
             info.head_leaf = info.tail_leaf = leaf1.offset = info.eof;
@@ -193,7 +195,7 @@ namespace sjtu {
         void insert_tonode(normalnode &node, Key &newkey, long offset) {
             int pos = 0;
             for (; pos < node.cur - 1; ++pos)
-                if (newkey <= node.key[pos]) break;
+                if (newkey < node.key[pos]&&newkey==node.key[pos]) break;
             for (int i = node.cur; i > pos + 1; --i)
                 node.child[i] = node.child[i - 1];
             for (int i = node.cur - 1; i > pos; --i)
@@ -637,7 +639,7 @@ namespace sjtu {
         };
 
         // Default Constructor and Copy Constructor
-        BTree(){
+        BTree() {
             f1 = nullptr;
             openfile();
             build_tree();
