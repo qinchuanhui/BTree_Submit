@@ -104,10 +104,12 @@ namespace sjtu {
                 f1 = fopen(f1_name, "rb+");
                 //if hasn't been open,open it but rb+ can only open
                 //can't create.
+                std::cout<<"f1"<<f1<<'\n';
                 if (f1 == nullptr){//open shibaire.
                     f1_exists = 0;
                     f1 = fopen(f1_name, "w");//w create a file;
                     fclose(f1);
+                    f1_exists = 1;
                     f1 = fopen(f1_name, "rb+");//using a proper way reopen;
                 } else readfile(&info, info_offset, 1, sizeof(info));
                 f1_isopen = 1;
@@ -656,7 +658,7 @@ namespace sjtu {
         BTree() {
             f1 = nullptr;
             openfile();
-            build_tree();
+            if(f1_exists==0)build_tree();
             // Todo Default
         }
 
@@ -723,8 +725,8 @@ namespace sjtu {
 
         // Check whether this BTree is empty
         bool empty() const {
-            if (info.size_tree == 0) return false;
-            else return true;
+            return (info.size_tree == 0);
+
         }
 
 
@@ -759,8 +761,7 @@ namespace sjtu {
          * The default method of check the equivalence is !(a < b || b > a)
          */
         size_t count(const Key &key) const {
-
-
+            return  0;
         }
 
         /**
