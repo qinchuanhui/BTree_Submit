@@ -84,7 +84,7 @@ namespace sjtu {
         information info;
         long info_offset = 0;
         FILE *f1;
-        char f1_name[20] ="xixixxii.txt" ;
+        char f1_name[20] ="majpipi.txt" ;
 
         bool f1_isopen = false;
         bool f1_exists =false;
@@ -109,7 +109,7 @@ namespace sjtu {
                     f1_exists = 0;
                     f1 = fopen(f1_name, "w");//w create a file;
                     fclose(f1);
-                    f1_exists = 1;
+
                     f1 = fopen(f1_name, "rb+");//using a proper way reopen;
                 } else readfile(&info, info_offset, 1, sizeof(info));
                 f1_isopen = 1;
