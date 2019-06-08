@@ -50,7 +50,7 @@ namespace sjtu {
             int child[M + 1];
             Key key[M];
             int cur;
-            bool child_isleaf = 0;
+            bool child_isleaf = false;
 
             normalnode() {
                 offset = 0;
@@ -87,19 +87,31 @@ namespace sjtu {
         char f1_name[20] ="xixixi.txt" ;
 
         bool f1_isopen = false;
+        bool f1_exists =false;
 
         inline void
         readfile(void *read_place, long offset, size_t num, size_t size)//put the information into a pointer;
         {
-            if (fseek(f1, offset, SEEK_SET)) throw "openf failed";
-            else fread(read_place, num, size, f1);
+            //if (fseek(f1, offset, SEEK_SET)) ;//throw "openf failed";
+
+            fseek(f1, offset, SEEK_SET);
+            fread(read_place, num, size, f1);
         }
 
         inline void openfile() {
+            f1_exists = 1;
             if (f1_isopen == 0) {
-                f1 = fopen(f1_name, "wb+");
+                f1 = fopen(f1_name, "rb+");
+                //if hasn't been open,open it but rb+ can only open
+                //can't create.
+                if (f1 == nullptr){//open shibaire.
+                    f1_exists = 0;
+                    f1 = fopen(f1_name, "w");//w create a file;
+                    fclose(f1);
+                    f1 = fopen(f1_name, "rb+");//using a proper way reopen;
+                } else readfile(&info, info_offset, 1, sizeof(info));
                 f1_isopen = 1;
-            } else readfile(&info, info_offset, 1, sizeof(info));
+            }
         }
 
 
@@ -110,8 +122,9 @@ namespace sjtu {
         }
 
         inline void writefile(void *write_place, long offset, size_t num, size_t size) {
-            if (fseek(f1, offset, SEEK_SET)) { throw "openfile failed"; }
-            else fwrite(write_place, num, size, f1);
+            //if (fseek(f1, offset, SEEK_SET)) {throw "openfile failed"; }
+            fseek(f1, offset, SEEK_SET);
+            fwrite(write_place, num, size, f1);
         }
 
 
@@ -335,6 +348,7 @@ namespace sjtu {
             BTree *from;
         public:
             bool modify(const Value &value) {
+                return  true;
 
             }
 
@@ -734,8 +748,9 @@ namespace sjtu {
             int pos = 0;
             for (; pos < leaf.cur; ++pos)
                 if (key == leaf.val[pos].first) break;
-            if (pos == leaf.cur) throw " ma wan yi mei you";
-            else return leaf.val[pos].second;
+            //if (pos == leaf.cur) //throw " ma wan yi mei you";
+            //else
+            return leaf.val[pos].second;
         }
 
         /**
