@@ -31,7 +31,7 @@ namespace sjtu {
 
         static const int M = 226;
         static const int L = 30;
-        
+
 
 
         struct information {
@@ -82,7 +82,7 @@ namespace sjtu {
         information info;
         long info_offset = 0;
         FILE *f1;
-        char f1_name[10] ="xixixi.txt" ;
+        char f1_name[20] ="xixixi.txt" ;
 
         bool f1_isopen = false;
 
@@ -637,7 +637,7 @@ namespace sjtu {
         };
 
         // Default Constructor and Copy Constructor
-        BTree() {
+        BTree(){
             f1 = nullptr;
             openfile();
             build_tree();
